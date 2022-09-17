@@ -32,7 +32,28 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
       url = url + "?o="+str(x)
 
     PARAMS = {
-        
-      }
+        "authority":"pe.olx.com.br",
+        "method":'GET',
+        "path":"/grande-recife/celulares/iphone",
+        "scheme":"https",
+        "referer":"https://pe.olx.com.br/grande-recife/celulares/iphone",
+        "sec-fetch-mode":"navigate",
+        "sec-fetch-size":"same-origin",
+        "sec-fetch-user":"?1",
+        "upgrade-insecure-request":"1",
+        "user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10103) AppleWebKit/537.36 (KHTML like Gecko) Chrome/41.0.2272.118 Safari/537.36"
+    }    
+    page = requests.get(url=url,headers= PARAMS)
+    soup = BeautifulSoup(page.content, "lxml")
+    items = soup.find_all("li", {"class":["sc-1fcmfeb-2 fvbmlV","sc-1fcmfeb-2 kZiBLm","sc-1fcmfeb-2 fvbmlV"]})
+    
+    
+    print(len(items))
+    
+    for item in items:
+      try:
+        print(item.findAll("h2")[0].contents[0])
+      except:
+        print("erro")
     
 buscarDadosOlx()
