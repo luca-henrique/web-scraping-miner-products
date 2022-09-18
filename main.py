@@ -124,11 +124,24 @@ def buscarDadosMercadoLivre(pages = 2, regiao = "GR"):
        
       except:
         print("erro")
-        
-    
-    
-buscarDadosMercadoLivre(pages = 1)
+      
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager  
 
-df = pd.DataFrame(listaJson)
+def buscarDadosFacebook():
+  url = "https://www.facebook.com/marketplace/106019586096075/search/?query=Iphone&exact=false"
+  
+  options = Options()
+  options.add_argument("start-maximized")
+  driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+  
+  driver.get(url)
+  
+  
+buscarDadosFacebook()
+
+#df = pd.DataFrame(listaJson)
 #df.to_excel("telefone.xlsx")
-df.to_html("index.html")
+#df.to_html("index.html")
