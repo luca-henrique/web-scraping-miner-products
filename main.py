@@ -50,9 +50,6 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
     soup = BeautifulSoup(page.content, "lxml")
     items = soup.find_all("li", {"class":["sc-1fcmfeb-2 fvbmlV","sc-1fcmfeb-2 kZiBLm","sc-1fcmfeb-2 fvbmlV"]})
     
-    
-    
-    
     for item in items:
       try:
         nomeTelefone = item.findAll("h2")[0].contents[0]
@@ -80,8 +77,6 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
 
 
         listaJson.append(json)
-        
-        
         
       except:
         print("erro")
