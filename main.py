@@ -51,11 +51,14 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
     items = soup.find_all("li", {"class":["sc-1fcmfeb-2 fvbmlV","sc-1fcmfeb-2 kZiBLm","sc-1fcmfeb-2 fvbmlV"]})
     
     
-    print(len(items))
+    
     
     for item in items:
       try:
         nomeTelefone = item.findAll("h2")[0].contents[0]
+        
+      
+        
         valorTelefone = item.findAll("span",class_="m7nrfa-0 eJCbzj sc-fzsDOv kHeyHD")[0].contents[0]
         valorTelefone = valorTelefone.split("R$")[1]
         valorTelefone = float(valorTelefone.replace(".",""))
@@ -66,19 +69,31 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
         diaPostagem =  informacoesDiaHoraPostagem.split()[0].replace(",","")
         
         urlTelefone = item.find("a")["href"]
-        
+
         enderecoItem = item.find_all("span",class_="sc-1c3ysll-1 iDvjkv sc-fzsDOv dTHJIA")[0].contents[0]
         
         json = {"dia_postagem":diaPostagem, "hora_postagem":horaPostagem, "nome":nomeTelefone, "valor":valorTelefone, "link":urlTelefone, "regiao": enderecoItem  }
+
         
-     
+        if ('IPhone' in nomeTelefone) or ('Iphone' in nomeTelefone):
+          print(test)
+
+
         listaJson.append(json)
+        
+        
         
       except:
         print("erro")
+        
+      for telefone in listaJson:
+          
+        if(telefone['nome'].toLower() == "Iphone X".toLower()):
+          print(telefone['nome'])
     
-buscarDadosOlx(pages = 100)
+buscarDadosOlx(pages = 1)
 
 df = pd.DataFrame(listaJson)
 
-df.to_excel("telefone.xlsx")
+#df.to_excel("telefone.xlsx")
+df.to_html("index.html")
