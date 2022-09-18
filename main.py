@@ -8,7 +8,7 @@ import json
 
 from difflib import SequenceMatcher
 from selenium import webdriver
-import time
+from time import sleep
 from datetime import date
 
 import re
@@ -17,12 +17,15 @@ import requests
 
 #https://pe.olx.com.br/grande-recife/celulares
 
+listaJson = []
+
 def buscarDadosOlx(pages = 2, regiao = "GR"):
   
   regiaoBuscar = {"GR":"grande-recife", "CTBA":"grande-recife", "PE":"recife"}
   prefix = {"GR":"pe", "CTBA":"pe", "PE":"pe"}
   
   for x in range(0, pages):
+    sleep(2)
     print("Loop" + (str(x)))
     url = "https://"+prefix[regiao]+".olx.com.br/"+regiaoBuscar[regiao]+"/celulares/iphone"
     
@@ -52,8 +55,30 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
     
     for item in items:
       try:
-        print(item.findAll("h2")[0].contents[0])
+        nomeTelefone = item.findAll("h2")[0].contents[0]
+        valorTelefone = item.findAll("span",class_="m7nrfa-0 eJCbzj sc-fzsDOv kHeyHD")[0].contents[0]
+        valorTelefone = valorTelefone.split("R$")[1]
+        valorTelefone = float(valorTelefone.replace(".",""))
+        
+        informacoesDiaHoraPostagem = item.findAll("span",class_="sc-11h4wdr-0 javKJU sc-fzsDOv dTHJIA")[0].contents[0]
+      
+        horaPostagem = informacoesDiaHoraPostagem.split()[1]
+        diaPostagem =  informacoesDiaHoraPostagem.split()[0].replace(",","")
+        
+        urlTelefone = item.find("a")["href"]
+        
+        enderecoItem = item.find_all("span",class_="sc-1c3ysll-1 iDvjkv sc-fzsDOv dTHJIA")[0].contents[0]
+        
+        json = {"dia_postagem":diaPostagem, "hora_postagem":horaPostagem, "nome":nomeTelefone, "valor":valorTelefone, "link":urlTelefone, "regiao": enderecoItem  }
+        
+     
+        listaJson.append(json)
+        
       except:
         print("erro")
     
-buscarDadosOlx()
+buscarDadosOlx(pages = 100)
+
+df = pd.DataFrame(listaJson)
+
+df.to_excel("telefone.xlsx")
