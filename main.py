@@ -15,7 +15,12 @@ import re
 
 import requests
 
-#https://pe.olx.com.br/grande-recife/celulares
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager  
+
+
 
 listaJson = []
 
@@ -26,7 +31,6 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
   
   for x in range(0, pages):
     sleep(2)
-    print("Loop" + (str(x)))
     url = "https://"+prefix[regiao]+".olx.com.br/"+regiaoBuscar[regiao]+"/celulares/iphone"
     
     if x == 0:
@@ -76,13 +80,11 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
         
      
     
-    
-#https://lista.mercadolivre.com.br/celulares-telefones/celulares-smartphones/iphone/usado/iphone_NoIndex_True#applied_filter_id%3DBRAND%26applied_filter_name%3DMarca%26applied_filter_order%3D3%26applied_value_id%3D9344%26applied_value_name%3DApple%26applied_value_order%3D5%26applied_value_results%3D7886%26is_custom%3Dfalse
 def buscarDadosMercadoLivre(pages = 2, regiao = "GR"):
   
   for x in range(0, pages):
     sleep(2)
-    print("Loop" + (str(x)))
+    
     url = "https://lista.mercadolivre.com.br/celulares-telefones/celulares-smartphones/iphone/usado/"
     
     if x == 0:
@@ -125,22 +127,20 @@ def buscarDadosMercadoLivre(pages = 2, regiao = "GR"):
       except:
         print("erro")
       
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager  
 
-def buscarDadosFacebook():
+
+def buscarDadosFacebook(manyTimeScroll = 2):
   url = "https://www.facebook.com/marketplace/106019586096075/search/?query=Iphone&exact=false"
   
   options = Options()
   options.add_argument("start-maximized")
+  
 
   driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
   
   driver.get(url)
   
-  for a in range(0,1):
+  for a in range(0,manyTimeScroll):
     sleep(4)
     driver.execute_script('window.scrollTo(0, document.body.scrollHeight+'+str(100*a)+');')
     sleep(4)
@@ -155,21 +155,21 @@ def buscarDadosFacebook():
     try:
       valorTelefone = item.find_all("span", class_="gvxzyvdx aeinzg81 t7p7dqev gh25dzvf tb6i94ri gupuyl1y i2onq4tn b6ax4al1 gem102v4 ncib64c9 mrvwc6qr sx8pxkcf f597kf1v cpcgwwas f5mw3jnl hxfwr5lz hpj0pwwo sggt6rq5 innypi6y pbevjfx6")[0].contents[0]
       
-      
       nomeTelefone = item.find_all("span",class_="b6ax4al1 lq84ybu9 hf30pyar om3e55n1")[0].contents[0]
-      
       
       urlTelefone = "https://www.facebook.com"+item["href"]
       
-      print(urlTelefone)
+      json = {"nome":nomeTelefone, "valor":valorTelefone, "link":urlTelefone  }
       
+      listaJson.append(json)
       
     except:
       print("erro")
   
   
-buscarDadosFacebook()
+buscarDadosFacebook(10)
+buscarDadosMercadoLivre(10)
+buscarDadosOlx(10)
 
-#df = pd.DataFrame(listaJson)
-#df.to_excel("telefone.xlsx")
-#df.to_html("index.html")
+df = pd.DataFrame(listaJson)
+df.to_json("telefone.json")
