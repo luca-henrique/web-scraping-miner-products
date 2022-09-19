@@ -135,9 +135,17 @@ def buscarDadosFacebook():
   
   options = Options()
   options.add_argument("start-maximized")
+
   driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
   
   driver.get(url)
+  
+  for a in range(0,10):
+    sleep(2)
+    driver.execute_script('window.scrollTo(0, document.body.scrollHeight+'+str(100*a)+');')
+    sleep(0.40)
+  
+  
   
   
 buscarDadosFacebook()
