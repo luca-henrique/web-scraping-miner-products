@@ -141,9 +141,9 @@ def buscarDadosFacebook(manyTimeScroll = 2):
   driver.get(url)
   
   for a in range(0,manyTimeScroll):
-    sleep(4)
+    sleep(2)
     driver.execute_script('window.scrollTo(0, document.body.scrollHeight+'+str(100*a)+');')
-    sleep(4)
+    sleep(2)
   
   result = driver.page_source
   
@@ -167,9 +167,7 @@ def buscarDadosFacebook(manyTimeScroll = 2):
       print("erro")
   
   
-buscarDadosFacebook(10)
-buscarDadosMercadoLivre(10)
-buscarDadosOlx(10)
+
 
 df = pd.DataFrame(listaJson)
-df.to_json("telefone.json")
+df.to_excel("telefone.xlsx")
