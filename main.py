@@ -231,6 +231,9 @@ cotacao_dolar = requisicao_dic["USDBRL"]["bid"]
 df = pd.DataFrame(listaJson)
 
 df = df[df[filterColumnName].str.contains(filterText) == False]
+
+df.loc[(df.valor > 100), 'valor'] = df.valor * cotacao_dolar
+
 df.drop(df[df['valor'] < filterPrice].index, inplace = True)
 
 print(df)
