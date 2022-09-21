@@ -21,7 +21,6 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager  
 
 
-
 listaJson = []
 
 def buscarDadosOlx(pages = 2, regiao = "GR"):
@@ -167,7 +166,12 @@ def buscarDadosFacebook(manyTimeScroll = 2):
       print("erro")
   
   
-
+  
+buscarDadosMercadoLivre(pages = 1)
 
 df = pd.DataFrame(listaJson)
+
+df = df[df["nome"].str.contains("iPhone 5|iPhone 6|iPhone 7|iPhone SE") == False]
+
 df.to_excel("telefone.xlsx")
+print(df)
