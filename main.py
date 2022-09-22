@@ -24,16 +24,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 facebook_link_miami = "https://www.facebook.com/marketplace/miami/search/?query=iphone&exact=false"
 listaJson = []
 
+logError = []
+
 
 
 def buscarDadosOlx(pages = 2, regiao = "GR"):
   
-  regiaoBuscar = {"GR":"grande-recife", "CTBA":"grande-recife", "PE":"recife"}
-  prefix = {"GR":"pe", "CTBA":"pe", "PE":"pe"}
+  
+  example = 0 
   
   for x in range(0, pages):
     sleep(2)
-    url = "https://"+prefix[regiao]+".olx.com.br/"+regiaoBuscar[regiao]+"/celulares/iphone"
+    url = "https://www.olx.com.br/celulares/iphone"
     
     if x == 0:
       print("somente uma pagina")
@@ -41,11 +43,11 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
       url = url + "?o="+str(x)
 
     PARAMS = {
-        "authority":"pe.olx.com.br",
+        "authority":"olx.com.br",
         "method":'GET',
-        "path":"/grande-recife/celulares/iphone",
+        "path":"celulares/iphone",
         "scheme":"https",
-        "referer":"https://pe.olx.com.br/grande-recife/celulares/iphone",
+        "referer":"https://www.olx.com.br/celulares/iphone",
         "sec-fetch-mode":"navigate",
         "sec-fetch-size":"same-origin",
         "sec-fetch-user":"?1",
@@ -54,31 +56,22 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
     }    
     page = requests.get(url=url,headers= PARAMS)
     soup = BeautifulSoup(page.content, "lxml")
-    items = soup.find_all("li", {"class":["sc-1fcmfeb-2 fvbmlV","sc-1fcmfeb-2 kZiBLm","sc-1fcmfeb-2 fvbmlV"]})
+    items = soup.find_all("a", {"class":["sc-12rk7z2-1 huFwya sc-htoDjs fpYhGm"]})
+    
     
     for item in items:
       try:
-        nomeTelefone = item.findAll("h2")[0].contents[0]
-        
-        valorTelefone = item.findAll("span",class_="m7nrfa-0 eJCbzj sc-fzsDOv kHeyHD")[0].contents[0]
-        valorTelefone = valorTelefone.split("R$")[1]
-        valorTelefone = float(valorTelefone.replace(".",""))
-        
-        informacoesDiaHoraPostagem = item.findAll("span",class_="sc-11h4wdr-0 javKJU sc-fzsDOv dTHJIA")[0].contents[0]
-      
-        horaPostagem = informacoesDiaHoraPostagem.split()[1]
-        diaPostagem =  informacoesDiaHoraPostagem.split()[0].replace(",","")
-        
-        urlTelefone = item.find("a")["href"]
-
-        enderecoItem = item.find_all("span",class_="sc-1c3ysll-1 iDvjkv sc-fzsDOv dTHJIA")[0].contents[0]
-        
-        json = {"dia_postagem":diaPostagem, "hora_postagem":horaPostagem, "nome":nomeTelefone, "valor":valorTelefone, "link":urlTelefone, "regiao": enderecoItem  }
-        
+        url = (item["href"])
+        nome = item.find_all("h2",class_=["kgl1mq-0 eFXRHn sc-ifAKCX FMjsQ","kgl1mq-0 eFXRHn sc-ifAKCX gzAEjc"])[0].contents[0]
+        valor = item.findAll("span",class_=["m7nrfa-0 eJCbzj sc-fzsDOv kHeyHD","m7nrfa-0 eJCbzj sc-ifAKCX ANnoQ"])[0].contents[0]
+        valor = valor.split("R$")[1]
+        valor = float(valor.replace(".",""))
+        json = {"nome":nome, "valor":valor, "link":url  }
         listaJson.append(json)
         
       except:
-        print("erro")
+        print("procurando error")
+       
         
      
     
@@ -153,6 +146,14 @@ def buscarDadosFacebookMiami(manyTimeScroll = 2):
 
   items = soup.find_all("a", attrs={"class":"qi72231t nu7423ey n3hqoq4p r86q59rh b3qcqh3k fq87ekyn bdao358l fsf7x5fv rse6dlih s5oniofx m8h3af8h l7ghb35v kjdc1dyq kmwttqpk srn514ro oxkhqvkx rl78xhln nch0832m cr00lzj9 rn8ck1ys s3jn8y49 icdlwmnq jxuftiz4 l3ldwz01"})
   
+  req_dolar = requests.get("https://economia.awesomeapi.com.br/last/USD-BRL")
+
+  requisicao_dic = req_dolar.json()
+
+  cotacao_dolar = requisicao_dic["USDBRL"]["bid"]
+
+  cotacao_dolar = round(float(cotacao_dolar))
+  
   for item in items:
     try:
       valorTelefone = item.find_all("span", class_="gvxzyvdx aeinzg81 t7p7dqev gh25dzvf tb6i94ri gupuyl1y i2onq4tn b6ax4al1 gem102v4 ncib64c9 mrvwc6qr sx8pxkcf f597kf1v cpcgwwas f5mw3jnl hxfwr5lz hpj0pwwo sggt6rq5 innypi6y pbevjfx6")[0].contents[0]
@@ -164,7 +165,7 @@ def buscarDadosFacebookMiami(manyTimeScroll = 2):
       
       urlTelefone = "https://www.facebook.com"+item["href"]
       
-      json = {"nome":nomeTelefone, "valor":valorTelefone, "link":urlTelefone  }
+      json = {"nome":nomeTelefone, "valor":valorTelefone*cotacao_dolar, "link":urlTelefone  }
       
       listaJson.append(json)
       
@@ -172,25 +173,15 @@ def buscarDadosFacebookMiami(manyTimeScroll = 2):
       print("erro")
   
   
-buscarDadosFacebookMiami(manyTimeScroll = 30)
+buscarDadosOlx(pages = 100)
   
-filterText = "iPhone 5|iPhone 6|iPhone 7|iPhone SE|iPhone 4|Vitrine|Para Retirada De Peças|iPhone 8"  
+filterText = "iPhone 5|iPhone 6|iPhone 7|iPhone SE|iPhone 4|Vitrine|Iphone 7|case|Case|Apple Watch|apple watch|iphone 7|IPHONE 7"  
 filterColumnName = "nome"
-filterPrice = 400
-
-req_dolar = requests.get("https://economia.awesomeapi.com.br/last/USD-BRL")
-
-requisicao_dic = req_dolar.json()
-
-cotacao_dolar = requisicao_dic["USDBRL"]["bid"]
-
-cotacao_dolar = round(float(cotacao_dolar))
+filterPrice = 1000
 
 df = pd.DataFrame(listaJson)
 
 df = df[df[filterColumnName].str.contains(filterText) == False]
-
-df.valor = df.valor * cotacao_dolar
 
 df.drop(df[df['valor'] < filterPrice].index, inplace = True)
 
