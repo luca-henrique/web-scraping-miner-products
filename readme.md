@@ -7,3 +7,5 @@ https://stackoverflow.com/questions/41435983/selenium-in-python-on-mac-geckodriv
 ## Remover texto especifico
 
 https://www.geeksforgeeks.org/how-to-drop-rows-that-contain-a-specific-string-in-pandas/
+
+ideal seria buscar a cada 1 hora
