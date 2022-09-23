@@ -173,11 +173,16 @@ def buscarDadosFacebookMiami(manyTimeScroll = 2):
       print("erro")
   
   
-buscarDadosOlx(pages = 100)
+buscarDadosOlx(pages = 1)
   
 filterText = "iPhone 5|iPhone 6|iPhone 7|iPhone SE|iPhone 4|Vitrine|Iphone 7|case|Case|Apple Watch|apple watch|iphone 7|IPHONE 7"  
 filterColumnName = "nome"
 filterPrice = 1000
+
+timeMinutes = 1800
+
+timerCreateDocument = 30
+from datetime import datetime
 
 df = pd.DataFrame(listaJson)
 
@@ -185,6 +190,16 @@ df = df[df[filterColumnName].str.contains(filterText) == False]
 
 df.drop(df[df['valor'] < filterPrice].index, inplace = True)
 
-df.to_excel("telefone.xlsx")
+now = datetime.now()
 
-print(df)
+date_time = now.strftime("%H:%M:%S").replace(",", "")
+nameFile = date_time+".xlsx"
+
+print(nameFile)
+
+df.to_excel(""+str(nameFile))
+
+
+#while True:
+#    print("eu")
+#    sleep(timerCreateDocument)
