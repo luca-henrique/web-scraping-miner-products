@@ -20,6 +20,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager  
 
+from datetime import datetime
+
+
 
 facebook_link_miami = "https://www.facebook.com/marketplace/miami/search/?query=iphone&exact=false"
 listaJson = []
@@ -173,33 +176,29 @@ def buscarDadosFacebookMiami(manyTimeScroll = 2):
       print("erro")
   
   
-buscarDadosOlx(pages = 1)
-  
 filterText = "iPhone 5|iPhone 6|iPhone 7|iPhone SE|iPhone 4|Vitrine|Iphone 7|case|Case|Apple Watch|apple watch|iphone 7|IPHONE 7"  
 filterColumnName = "nome"
 filterPrice = 1000
 
-timeMinutes = 1800
+timeMinutes = 1200
 
 timerCreateDocument = 30
-from datetime import datetime
+countPageSearch = 100  
+  
 
-df = pd.DataFrame(listaJson)
+while True:
+  buscarDadosOlx(pages = countPageSearch)
+  df = pd.DataFrame(listaJson)
 
-df = df[df[filterColumnName].str.contains(filterText) == False]
+  df = df[df[filterColumnName].str.contains(filterText) == False]
 
-df.drop(df[df['valor'] < filterPrice].index, inplace = True)
+  df.drop(df[df['valor'] < filterPrice].index, inplace = True)
 
-now = datetime.now()
+  now = datetime.now()
 
-date_time = now.strftime("%H:%M:%S").replace(",", "")
-nameFile = date_time+".xlsx"
+  date_time = now.strftime("%H:%M %d/%m/%Y").replace(",", "").replace(" ", "-").replace("/", "-")
+  nameFile = date_time+".xlsx"
 
-print(nameFile)
-
-df.to_excel(""+str(nameFile))
-
-
-#while True:
-#    print("eu")
-#    sleep(timerCreateDocument)
+  df.to_excel(""+str(nameFile))
+  
+  sleep(timerCreateDocument)
