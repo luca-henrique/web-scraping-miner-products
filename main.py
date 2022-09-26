@@ -30,7 +30,6 @@ listaJson = []
 logError = []
 
 
-
 def buscarDadosOlx(pages = 2, regiao = "GR"):
   
   
@@ -75,8 +74,6 @@ def buscarDadosOlx(pages = 2, regiao = "GR"):
       except:
         print("procurando error")
        
-        
-     
     
 def buscarDadosMercadoLivre(pages = 2, regiao = "GR"):
   
@@ -125,7 +122,6 @@ def buscarDadosMercadoLivre(pages = 2, regiao = "GR"):
       except:
         print("erro")
       
-
 
 def buscarDadosFacebookMiami(manyTimeScroll = 2):
   url = facebook_link_miami
@@ -201,4 +197,4 @@ while True:
 
   df.to_excel(""+str(nameFile))
   
-  sleep(timerCreateDocument)
+  sleep(timeMinutes)
