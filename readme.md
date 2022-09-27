@@ -47,3 +47,4 @@ ideal seria buscar a cada 1 hora
 [x] modulo para busca de produto no facebook
 [x] modulo para busca de produto no mercado livre
 [x] modulo para busca de produto no olx
+[] busca no facebook por media de preço na região em um raio de 120km
