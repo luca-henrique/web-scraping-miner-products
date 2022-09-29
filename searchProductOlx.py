@@ -4,12 +4,19 @@ from time import sleep
 import requests
 
 
-def buscarDadosOlx(pages=2):
-
+def buscarDadosOlx(pages=2, UF = ""):
+    data = []
     for x in range(0, pages):
         sleep(2)
-        url = "https://www.olx.com.br/celulares/iphone"
-
+        
+        url = ""
+        
+        if(UF != ""):
+            url = "https://"+str(UF)+".olx.com.br/celulares/iphone"
+        else:
+            url = "https://www.olx.com.br/celulares/iphone"
+        
+    
         if x == 0:
             print("somente uma pagina")
         else:
@@ -32,9 +39,11 @@ def buscarDadosOlx(pages=2):
         soup = BeautifulSoup(page.content, "lxml")
         items = soup.find_all(
             "a", {"class": ["sc-12rk7z2-1 huFwya sc-htoDjs fpYhGm"]})
+        data.extend(itemsInList(items = items))
+    
+    return data
 
-        return itemsInList(items)
-
+    
 
 def itemsInList(items=[]):
     data = []
@@ -48,9 +57,9 @@ def itemsInList(items=[]):
             valor = valor.split("R$")[1]
             valor = float(valor.replace(".", ""))
             json = {"nome": nome, "valor": valor, "link": url}
+            
             data.append(json)
-
         except:
             print("procurando error")
-
-    return data
+            
+    return data    

@@ -3,7 +3,8 @@ from constants import minPricePhone, maxPricePhone, filterPhoneList
 
 
 def filterByList(file_xlsx):
-    loadFiler = file_xlsx[file_xlsx.nome.isin(filterPhoneList) == False]
+    print(file_xlsx)
+    loadFiler = file_xlsx[file_xlsx['nome'].isin(filterPhoneList) == False]
     return loadFiler
 
 

@@ -6,13 +6,12 @@ from datetime import datetime
 from filterFileFunctions import filterByList, filterByPrice
 from searchProductOlx import buscarDadosOlx
 
-
 timeWaitingNextSearch = 1200
 countPageSearch = 100
 
-
 while True:
-    listaJson = buscarDadosOlx()
+    listaJson = buscarDadosOlx(pages=countPageSearch, UF = "pe")
+    
     df = pd.DataFrame(listaJson)
 
     df = filterByList(df)
@@ -22,7 +21,7 @@ while True:
     now = datetime.now()
 
     date_time = now.strftime(
-        "%H:%M %d/%m/%Y").replace(",", "").replace(" ", "-").replace("/", "-")
+       "%H:%M %d/%m/%Y").replace(",", "").replace(" ", "-").replace("/", "-")
     nameFile = date_time+".xlsx"
 
     df.to_excel(""+str(nameFile))

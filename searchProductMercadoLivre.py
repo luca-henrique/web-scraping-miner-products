@@ -19,7 +19,7 @@ logError = []
 
 
 def buscarDadosMercadoLivre(pages=2, regiao="GR"):
-
+   
     for x in range(0, pages):
         sleep(2)
 
