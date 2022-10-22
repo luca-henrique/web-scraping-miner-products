@@ -32,10 +32,6 @@ ideal seria buscar a cada 1 hora
 
 # Erros;Features
 
-[x] iPhone 8|iPhone8|
-[x] remover iPhone x
-[x] remover iPhone xr|Iphone xr
-[x] remover iPhone 7
 [x] remover Apple watch|Apple watch
 [x] remover iPhone 8 Plus
 [x] remover iPad
@@ -47,4 +43,8 @@ ideal seria buscar a cada 1 hora
 [x] modulo para busca de produto no facebook
 [x] modulo para busca de produto no mercado livre
 [x] modulo para busca de produto no olx
+
+[] busca no facebook por media de preço na região em um raio de 120km
+[] a busca tem que ser por regex
+[] adicionar iPhone xr| xr | xs | 11 | 12 |13
 [] busca no facebook por media de preço na região em um raio de 120km

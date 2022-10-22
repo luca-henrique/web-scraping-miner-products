@@ -17,8 +17,8 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def buscarDadosFacebook(manyTimeScroll=2, listaJson=[]):
-    url = "https://www.facebook.com/marketplace/miami/search/?query=iphone&exact=false"
+def searchProductFacebook(manyTimeScroll=10, listaJson=[]):
+    url = "https://www.facebook.com/marketplace/104941129541687/search/?query=ssd"
 
     options = Options()
     options.add_argument("start-maximized")
@@ -61,7 +61,7 @@ def buscarDadosFacebook(manyTimeScroll=2, listaJson=[]):
 
             urlTelefone = "https://www.facebook.com"+item["href"]
 
-            json = {"nome": nomeTelefone, "valor": valorTelefone *
+            json = {"name": nomeTelefone, "valor": valorTelefone *
                     cotacao_dolar, "link": urlTelefone}
 
             listaJson.append(json)
