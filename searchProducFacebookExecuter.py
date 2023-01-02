@@ -13,12 +13,12 @@ listaJson = searchProductFacebook()
       
 df = pd.DataFrame(listaJson)
 
-df = filterByList(df)
-df = filterByPrice(df)
+#df = filterByList(df)
+#df = filterByPrice(df)
 
 now = datetime.now()
 
 date_time = now.strftime(
          "%H:%M %d/%m/%Y").replace(",", "").replace(" ", "-").replace("/", "-")
 nameFile = date_time+".xlsx"
-df.to_excel(uf+str(nameFile))
+df.to_excel(nameFile)
